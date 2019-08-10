@@ -1,0 +1,119 @@
+Boolean forManagedPackage = true;
+String managedPackagePrefix = 'namespace_'; // use only one underscore in this variable
+
+// THIS IS NOT A FINAL BOILERPLATE SCRIPT
+// THIS MUST BE EDITED TO FIT YOUR USE-CASE
+// READ THE INSTRUCTIONS AT BOTTOM FOR MORE INFORMATION
+
+Map<String, Schema.SObjectType> gd = Schema.getGlobalDescribe();
+List<SObjectType> desiredObjects = new List<SObjectType> {
+	
+};
+
+String scope = forManagedPackage ? 'global' : 'public';
+
+for(Schema.SObjectType obj : gd.values()) {
+    String objName = obj.getDescribe().getName();
+	if (objName.right(3) != '__c') { continue; }
+	//if (objName.left(6) != 'namespaced_') { continue; }
+	if (!desiredObjects.contains(obj)) { continue; }
+    String builder = objName.replace('__c','Builder').replace('__','_');
+	if (!forManagedPackage) { builder = builder.replace(managedPackagePrefix,''); }
+    System.debug(' ');
+	if (!forManagedPackage && objName.left(5) == managedPackagePrefix ) {
+		System.debug(scope+' with sharing class ' + builder + ' extendsdbf_DomainBuilderWrapper {');
+		System.debug('\tprivate ' + managedPackagePrefix + builder + ' mngpkgBuilder;');
+		System.debug(' ');
+		System.debug('\t'+scope+' ' + builder + '() {');
+		System.debug('\t\tsuper('+objName+'.getSObjectType());');
+		System.debug('\t\tmngpkgBuilder = new ' + managedPackagePrefix + builder + '();');
+		System.debug('\t}');
+		System.debug(' ');
+		System.debug('\tpublic override Object underlyingBuilder() { return (Object) mngpkgBuilder; }');
+		System.debug(' ');
+		System.debug('\tpublic override SObject underlyingRecord() { return mngpkgBuilder.getRecord(); }');
+		System.debug(' ');
+	} else {
+		System.debug(scope+' with sharing class ' + builder + ' extendsdbf_DomainBuilder {');
+		System.debug('\t'+scope+' ' + builder + '() { super('+objName+'.getSObjectType()); }');
+		System.debug(' ');
+		if (forManagedPackage) {
+			System.debug('\t'+scope+' SObject getRecord() { return super.record; }');
+			System.debug(' ');
+			System.debug('\t'+scope+' '+builder+' withCustom(Schema.SObjectField field, Object value) { super.set(field, value); return this; }');
+			System.debug(' ');
+		}
+	}
+    Map<String, Schema.SObjectField> fields = obj.getDescribe().fields.getMap();
+    for (String field : fields.keySet()) {
+		
+		// filter field names here before getdescribe is called
+		// ignore anything that isn't 'id', 'name' or ending in '__c'
+		if (field != 'id' && field != 'name' && field.right(3) != '__c') { continue; }
+		
+		SObjectField fld = fields.get(field);
+		
+		// skip formula fields
+		if (fld.getDescribe().isCalculated()) { continue; }
+		
+		Pattern nonAlphanumeric = Pattern.compile('[^a-zA-Z0-9]');
+		Matcher matcher = nonAlphanumeric.matcher(fld.getDescribe().getLabel());
+		String descr = matcher.replaceAll('');
+		
+        String fieldKey = objName+'.'+field;
+        String dataType = String.valueOf(fld.getDescribe().getType());
+		if (dataType == 'STRING') { dataType = 'String'; }
+		if (dataType == 'BOOLEAN') { dataType = 'Boolean'; }
+		if (dataType == 'DATETIME') { dataType = 'DateTime'; }
+		if (dataType == 'DATE') { dataType = 'DateTime'; }
+		if (dataType == 'DOUBLE') { dataType = 'Double'; }
+		if (dataType == 'PERCENT') { dataType = 'Decimal'; }
+		if (dataType == 'TEXTAREA') { dataType = 'String'; }
+		if (dataType == 'ID') { dataType = 'Id'; }
+		if (dataType == 'REFERENCE') { dataType = 'Id'; }
+		if (dataType == 'PICKLIST') { dataType = 'String'; }
+		if (dataType == 'CURRENCY') { dataType = 'Decimal'; }
+        System.debug(' ');
+    	System.debug('\t// @description\tSets value of '+fieldKey);
+		if (forManagedPackage || objName.left(5) != managedPackagePrefix ) {
+			System.debug('\t'+scope+' '+builder+' with'+descr+'('+dataType+' value) { super.set('+fieldKey+', value); return this; }');
+		} else {
+			if (field.left(5) == managedPackagePrefix || field == 'id' || field == 'name') {
+				System.debug('\t'+scope+' '+builder+' with'+descr+'('+dataType+' value) { mngpkgBuilder.with'+descr+'(value); return this; }');
+			} else {
+				System.debug('\t'+scope+' '+builder+' with'+descr+'('+dataType+' value) { mngpkgBuilder.withCustom('+fieldKey+', value); return this; }');
+			}
+		}
+    }
+    System.debug('}');
+}
+
+/*  INSTRUCTIONS
+
+    - Adjust the 1st line of code to determine whether you are running this to produce to namespaced builder, or a local builder
+    - Adjust the desiredObjects list to define which sObjects you are generating builder(s) for. Too many, and you will exceed Apex CPU limits and the log will be truncated.
+    - Execute the above script, after adjustments have been made.
+    - Download the resulting log file.
+    - Open the log file with a program such as Notepad++ which can do regex find & replace
+    - Find & replace using regex:
+        - Ctrl+H 
+        - Select "Regular Expression" at the bottom
+        - Find what: ^(?!.*\|DEBUG\|).*$
+        - Replace with: (leave blank)
+        - Click: Replace All 
+    - Find & replace using regex:
+        - Ctrl+H 
+        - Select "Regular Expression" at the bottom
+        - Find what: ^.*\|DEBUG\|
+        - Replace with: (leave blank)
+        - Click: Replace All
+    - Find & replace using extended:
+        - Ctrl+H 
+        - Select "Extended" at the bottom
+        - Find what: \n\n 
+        - Replace with: \n 
+        - Click: Replace All
+        - Repeat click until 0 results replaced
+    - Copy each Class, or the portions you need, to new or existing .cls file(s) in the appropriate folder(s)
+
+*/

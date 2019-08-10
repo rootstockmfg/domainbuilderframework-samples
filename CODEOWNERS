@@ -1,0 +1,18 @@
+# Code Owners file
+#
+# Reference GitHub CODEOWNERS documentation here -- https://help.github.com/en/articles/about-code-owners
+#
+# Repository Global Owners
+* @ImJohnMDaniel @TheRickParker
+
+
+CODEOWNERS @TheRickParker
+Jenkinsfile @ImJohnMDaniel
+sfdx-project.json @TheRickParker
+example_boilerplate_script.txt @TheRickParker
+
+/sfdx-source/demo/ @TheRickParker
+/sfdx-source/reference-implementation-simple/ @TheRickParker
+/sfdx-source/reference-implementation-simple-wmp/ @TheRickParker
+/sfdx-source/reference-implementation-story-driven/ @TheRickParker
+/sfdx-source/reference-implementation-story-driven-wmp/ @TheRickParker

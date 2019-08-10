@@ -1,0 +1,39 @@
+{
+  "packageDirectories": [
+    {
+      "path": "sfdx-source/frameworks/dxb-domainbuilder",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/demo",
+      "default": true
+    },
+    {
+      "path": "sfdx-source/frameworks",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/demo",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/reference-implementation-simple",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/reference-implementation-story-driven",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/reference-implementation-simple-wmp",
+      "default": false
+    },
+    {
+      "path": "sfdx-source/reference-implementation-story-driven-wmp",
+      "default": false
+    }
+  ],
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "46.0"
+}
