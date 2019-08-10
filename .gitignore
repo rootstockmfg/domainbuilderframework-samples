@@ -1,0 +1,61 @@
+# General Project related
+target/
+temp/
+/deploy/*
+/debug/
+**/dep-dir.txt
+*.prefs
+build.properties
+/sfdx-source/demo/main/default
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.lo
+
+# MavensMate IDE related
+*mm.log
+*.sublime-build
+*.sublime-project
+*.sublime-settings
+*.sublime-workspace
+.sublime-project
+.tm_properties
+
+# Eclipse IDE Related
+.project
+.settings/
+salesforce.schema
+Referenced Packages/
+
+# VS Code IDE Related
+.vscode/
+.history/
+
+# SFDX Related
+.sfdx/
+sfdx-source/common-base/main/default/
+sfdx-source/untracked/
+.execanon
+
+# NPM Related
+package.json
+/node_modules
+package-lock.json
+
+# Eslint cache
+.eslintcache
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+
+
+# Other Related
+/bin/server.key
