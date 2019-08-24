@@ -56,7 +56,7 @@ public inherited sharing class DemoStory extends dbf_DomainBuilderstory {
             narrate()
                 .over(ContactRyanJacksonNarr.class)
                 .relate(
-                    newdbf_DomainBuilderStory.Relation()
+                    new dbf_DomainBuilderStory.Relation()
                         .onField(Contact.AccountId)
                         .toNarrative(AccountExpConstrNarr.class)
                         .whereField(Account.Name)
