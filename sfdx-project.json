@@ -1,18 +1,6 @@
 {
   "packageDirectories": [
     {
-      "path": "sfdx-source/frameworks/dxb-domainbuilder",
-      "default": false
-    },
-    {
-      "path": "sfdx-source/demo",
-      "default": true
-    },
-    {
-      "path": "sfdx-source/frameworks",
-      "default": false
-    },
-    {
       "path": "sfdx-source/demo",
       "default": false
     },
@@ -31,6 +19,10 @@
     {
       "path": "sfdx-source/reference-implementation-story-driven-wmp",
       "default": false
+    },
+    {
+      "path": "sfdx-source/untracked",
+      "default": true
     }
   ],
   "namespace": "",
